@@ -6,72 +6,11 @@
 /*   By: xle-baux <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 12:34:34 by xle-baux          #+#    #+#             */
-/*   Updated: 2021/12/04 18:30:47 by xle-baux         ###   ########.fr       */
+/*   Updated: 2021/12/05 18:25:56 by xle-baux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
-
-int	ft_putchar(char c, int len)
-{
-	if (!c)
-		return (++len);
-	write(1, &c, 1);
-	return (++len);
-}
-
-int	ft_putstr(char *str, int len)
-{
-	int	i;
-	if (!str)
-		return (len);
-	i = 0;
-	while (str[i] != '\0')
-		len = ft_putchar(str[i++], len);
-	return (len);
-}
-
-int	ft_putnbr(int n, int len)
-{
-	long int	nbr;
-
-	nbr = n;
-	if (nbr < 0)
-	{
-		nbr = nbr * -1;
-		len = ft_putchar('-', len);
-	}
-	if (nbr < 10)
-		len = ft_putchar(nbr + '0', len);
-	else if (nbr >= 10)
-	{
-		ft_putnbr(nbr / 10, len);
-		ft_putnbr(nbr % 10, len);
-	}
-	return (len);
-}
-
-int	ft_putnbr_base(int nbr, char *base, int len)
-{
-	long int	nb;
-
-	nb = nbr;
-	if (nb < 0)
-	{
-		len =ft_putchar('-', len);
-		nb = nb * -1;
-	}
-	if (nb < 16)
-	{
-		len = ft_putchar(base[nb], len);
-	}
-	else
-	{
-		ft_putnbr_base(nb / 16, base, len);
-		ft_putnbr_base(nb % 16, base, len);
-	}
-	return (len);
-}
+#include "includes/ft_printf.h"
 
 int is_type(const char *str)
 {
@@ -89,47 +28,26 @@ int is_type(const char *str)
 	return (0);
 }
 
-/*
-int	lenargs(const char *str)
-{
-	int	num;
-	int	i;
-
-	num = 0;
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (is_type(&str[i]) == 1)
-		{
-			num++;
-			i++;
-		}
-		else
-			i++;
-	}
-	return (num);
-}*/
-
 int	put_type(char c, va_list args, int len)
 {
 	if (c == 'c')
-		len = ft_putchar(va_arg(args, int), len);
+		len = ft_putchar_len(va_arg(args, int), len);
 	if (c == 's')
-		len = ft_putstr(va_arg(args, char*), len);
+		len = ft_putstr_len(va_arg(args, char*), len);
 	if (c == 'p')
-		len = ft_putnbr_base(va_arg(args, int), "0123456789ABCDEF", len);
+		len = ft_putptr_len(va_arg(args, unsigned long long int), len);
 	if (c == 'd')
-		len = ft_putnbr(va_arg(args, int), len);
+		len = ft_putnbr_len(va_arg(args, int), len);
 	if (c == 'i')
-		len = ft_putnbr(va_arg(args, int), len);
+		len = ft_putnbr_len(va_arg(args, int), len);
 	if (c == 'u')
-		len = ft_putnbr(va_arg(args, unsigned int), len);
+		len = ft_put_unint_nbr_len(va_arg(args, unsigned int), len);
 	if (c == 'x')
-		len = ft_putnbr_base(va_arg(args, int), "0123456789abcdef", len);
+		len = ft_put_lower_hexa(va_arg(args, long int), len);
 	if (c == 'X')
-		len = ft_putnbr_base(va_arg(args, int), "0123456789ABCDEF", len);
+		len = ft_put_upper_hexa(va_arg(args, long int), len);
 	if (c == '%')
-		len = ft_putchar('%', len);
+		len = ft_putchar_len('%', len);
 	return (len);
 }
 
@@ -146,7 +64,7 @@ int	ft_printf(const char *str, ...)
 	{
 		if (is_type(&str[i_str]) == 0)
                 {
-			len = ft_putchar(str[i_str], len);
+			len = ft_putchar_len(str[i_str], len);
 		}
 		else
 		{
