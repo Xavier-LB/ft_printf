@@ -6,13 +6,13 @@
 /*   By: xle-baux <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 12:34:34 by xle-baux          #+#    #+#             */
-/*   Updated: 2021/12/05 18:25:56 by xle-baux         ###   ########.fr       */
+/*   Updated: 2021/12/06 11:38:18 by xle-baux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_printf.h"
 
-int is_type(const char *str)
+static int	is_type(const char *str)
 {
 	int	i;
 
@@ -28,12 +28,12 @@ int is_type(const char *str)
 	return (0);
 }
 
-int	put_type(char c, va_list args, int len)
+static int	put_type(char c, va_list args, int len)
 {
 	if (c == 'c')
 		len = ft_putchar_len(va_arg(args, int), len);
 	if (c == 's')
-		len = ft_putstr_len(va_arg(args, char*), len);
+		len = ft_putstr_len(va_arg(args, char *), len);
 	if (c == 'p')
 		len = ft_putptr_len(va_arg(args, unsigned long long int), len);
 	if (c == 'd')
@@ -53,17 +53,17 @@ int	put_type(char c, va_list args, int len)
 
 int	ft_printf(const char *str, ...)
 {
-	int	i_str;
-	int	len;
+	int		i_str;
+	int		len;
 	va_list	args;
 
 	va_start(args, str);
-        i_str = 0;
+	i_str = 0;
 	len = 0;
 	while (str[i_str] != '\0')
 	{
 		if (is_type(&str[i_str]) == 0)
-                {
+		{
 			len = ft_putchar_len(str[i_str], len);
 		}
 		else

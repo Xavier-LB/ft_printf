@@ -6,11 +6,28 @@
 /*   By: xle-baux <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 18:04:14 by xle-baux          #+#    #+#             */
-/*   Updated: 2021/12/05 18:25:17 by xle-baux         ###   ########.fr       */
+/*   Updated: 2021/12/06 11:28:03 by xle-baux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
+
+static int	ft_put_hexa(unsigned long long int nb, int len)
+{
+	char			*hexa;
+
+	hexa = "0123456789abcdef";
+	if (nb < 16)
+	{
+		ft_putchar_len(hexa[nb], len);
+	}
+	else
+	{
+		len = ft_put_hexa(nb / 16, len);
+		ft_put_hexa(nb % 16, len);
+	}
+	return (len + 1);
+}
 
 int	ft_putptr_len(unsigned long long int nb, int len)
 {
@@ -25,8 +42,8 @@ int	ft_putptr_len(unsigned long long int nb, int len)
 	}
 	else
 	{
-		len = ft_put_lower_hexa(nb / 16, len);
-		ft_put_lower_hexa(nb % 16, len);
+		len = ft_put_hexa(nb / 16, len);
+		ft_put_hexa(nb % 16, len);
 	}
 	return (len + 1);
 }
